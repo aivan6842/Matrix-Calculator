@@ -21,49 +21,9 @@ class Matrix():
         self.rows = []
         self.cols = []
         self.inter_created = inter_created
-        if not(self.inter_created):
-            self.create_rows()
-            self.create_cols()
-        else:
-            self.rows = inter_rows
-            self.create_cols()
+        self.rows = inter_rows
+        self.create_cols()
         
-
-    def create_rows(self):
-        '''
-        (Matrix) -> None
-
-        Prompts the user to create rows for the matrix.
-        '''
-        if self.num_cols <= 0 or self.num_rows <= 0:
-            raise Exception("Invalid dimensions")
-        i = 0
-        while i < self.num_rows:
-            print(f'Enter the entries for row {i+1} separated by spaces:')
-            entries = input().strip()
-            row = entries.split()
-            
-            flag = False
-            for j in range(len(row)):
-                try:
-                    row[j] = Fraction(row[j])
-                except ValueError:
-                    print('Invalid input')
-                    flag = True
-                    break
-
-            if flag:
-                 continue
-            else:
-                if len(row) > self.num_cols:
-                    print('You entered more entries than the matrix requires.')
-                    continue
-                elif len(row) < self.num_cols:
-                    print('You entered less entries than the matrix requires.')
-                    continue
-                self.rows.append(row)
-                i += 1
-
     def create_cols(self):
         '''
         (Matrix) -> (None)
@@ -476,16 +436,16 @@ class Window(Frame):
         self.widgets['equal']['command'] = lambda: self.evaluate(Calculator.internal_line)
         self.widgets['clear']['command'] = lambda: self.clear_calculator_line()
         self.widgets['backspace']['command'] = lambda: self.backspace()
-        self.widgets['0']['command'] = lambda: [self.add_symbol("0", "0"), self.display_text()]
-        self.widgets['1']['command'] = lambda: [self.add_symbol("1", "1"), self.display_text()]
-        self.widgets['2']['command'] = lambda: [self.add_symbol("2", "2"), self.display_text()]
-        self.widgets['3']['command'] = lambda: [self.add_symbol("3", "3"), self.display_text()]
-        self.widgets['4']['command'] = lambda: [self.add_symbol("4", "4"), self.display_text()]
-        self.widgets['5']['command'] = lambda: [self.add_symbol("5", "5"), self.display_text()]
-        self.widgets['6']['command'] = lambda: [self.add_symbol("6", "6"), self.display_text()]
-        self.widgets['7']['command'] = lambda: [self.add_symbol("7", "7"), self.display_text()]
-        self.widgets['8']['command'] = lambda: [self.add_symbol("8", "8"), self.display_text()]
-        self.widgets['9']['command'] = lambda: [self.add_symbol("9", "9"), self.display_text()]
+        self.widgets['0']['command'] = lambda: [self.add_symbol("0", "0")]
+        self.widgets['1']['command'] = lambda: [self.add_symbol("1", "1")]
+        self.widgets['2']['command'] = lambda: [self.add_symbol("2", "2")]
+        self.widgets['3']['command'] = lambda: [self.add_symbol("3", "3")]
+        self.widgets['4']['command'] = lambda: [self.add_symbol("4", "4")]
+        self.widgets['5']['command'] = lambda: [self.add_symbol("5", "5")]
+        self.widgets['6']['command'] = lambda: [self.add_symbol("6", "6")]
+        self.widgets['7']['command'] = lambda: [self.add_symbol("7", "7")]
+        self.widgets['8']['command'] = lambda: [self.add_symbol("8", "8")]
+        self.widgets['9']['command'] = lambda: [self.add_symbol("9", "9")]
         
         
 
@@ -694,8 +654,32 @@ class Window(Frame):
                     del Calculator.display_items[len(Calculator.display_items)-1-Calculator.display_items[::-1].index('DET')]
             else:
                 del Calculator.display_items[-1]
-            Calculator.internal_line = Calculator.internal_line.replace(Calculator.internal_items[-1], '')
+            Calculator.internal_line = Calculator.internal_line[:Calculator.internal_line.rfind(Calculator.internal_items[-1])]
             del Calculator.internal_items[-1]
+
+        if len(Calculator.internal_items) ==0:
+            Calculator.digit_ended =False
+            Calculator.prev_digit_ended = False
+        elif len(Calculator.internal_items) ==1:
+            if Calculator.internal_items[-1] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                Calculator.digit_ended = False
+                Calculator.prev_digit_ended=False
+            else:
+                Calculator.digit_ended = True
+                Calculator.prev_digit_ended=False
+        else:
+            if Calculator.internal_items[-1] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'] and Calculator.internal_items[-2] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                Calculator.digit_ended = False
+                Calculator.prev_digit_ended = False
+            elif Calculator.internal_items[-1] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'] and not Calculator.internal_items[-2] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                Calculator.digit_ended = False
+                Calculator.prev_digit_ended = True
+            elif not Calculator.internal_items[-1] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'] and Calculator.internal_items[-2] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                Calculator.digit_ended = True
+                Calculator.prev_digit_ended = False
+            else:
+                Calculator.digit_ended = True
+                Calculator.prev_digit_ended = True
         self.display_text()
 
     def close_window(self, window):
@@ -708,4 +692,3 @@ root.geometry("800x600")
 root.resizable(0, 0)
 app = Window(root)
 root.mainloop()
-
