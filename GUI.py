@@ -5,7 +5,6 @@ import copy
 
 class Calc():
     def __init__(self):
-        self.display_line = f''
         self.internal_line = f''
         self.counter = 1
         self.display_items = []
@@ -567,12 +566,10 @@ class Window(Frame):
         if Calculator.digit_ended:
             display_item = " "+disp_symb + ' '
             internal_item =" "+inter_symb + ' '
-            Calculator.display_line += display_item
             Calculator.display_items.append(display_item)
             Calculator.internal_line += internal_item
             Calculator.internal_items.append(internal_item)
         else:
-            Calculator.display_line += disp_symb
             Calculator.internal_line += inter_symb
             if len(Calculator.display_items) == 0 or Calculator.prev_digit_ended:
                 Calculator.display_items.append(disp_symb)
@@ -611,6 +608,7 @@ class Window(Frame):
 
         self.display_text()
     def evaluate(self, line):
+        print(Calculator.display_items)
         if len(Calculator.internal_items) == 0:
             pass
         elif len(Calculator.internal_items) == 1:
@@ -623,25 +621,23 @@ class Window(Frame):
                     result = f'Matrix({result.num_rows},{result.num_cols},True,{result.rows})'
                     Calculator.display_items = [f'{str(res_matrix)}']
                     Calculator.internal_items = [f'{result}']
-                    Calculator.display_line = f'{str(res_matrix)}'
                     Calculator.internal_line = f'{result}'
                 else:
                     Calculator.display_items = [f'{result}']
                     Calculator.internal_items = [f'{result}']
-                    Calculator.display_line = f'{result}'
                     Calculator.internal_line = f'{result}'
                 self.display_text()
             except:
                 self.create_window_err('Invalid Syntax', self.master)
 
     def clear_calculator_line(self):
-        Calculator.display_line = ''
         Calculator.internal_line = ''
         Calculator.display_items = []
         Calculator.internal_items = []
         self.display_text()
 
     def backspace(self):
+        digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
         if len(Calculator.internal_items) ==0:
             pass
         else:
@@ -661,20 +657,20 @@ class Window(Frame):
             Calculator.digit_ended =False
             Calculator.prev_digit_ended = False
         elif len(Calculator.internal_items) ==1:
-            if Calculator.internal_items[-1] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            if Calculator.internal_items[-1] in digits:
                 Calculator.digit_ended = False
                 Calculator.prev_digit_ended=False
             else:
                 Calculator.digit_ended = True
                 Calculator.prev_digit_ended=False
         else:
-            if Calculator.internal_items[-1] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'] and Calculator.internal_items[-2] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            if Calculator.internal_items[-1] in digits and Calculator.internal_items[-2] in digits:
                 Calculator.digit_ended = False
                 Calculator.prev_digit_ended = False
-            elif Calculator.internal_items[-1] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'] and not Calculator.internal_items[-2] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            elif Calculator.internal_items[-1] in digits and not Calculator.internal_items[-2] in digits:
                 Calculator.digit_ended = False
                 Calculator.prev_digit_ended = True
-            elif not Calculator.internal_items[-1] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'] and Calculator.internal_items[-2] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            elif not Calculator.internal_items[-1] in digits and Calculator.internal_items[-2] in digits:
                 Calculator.digit_ended = True
                 Calculator.prev_digit_ended = False
             else:
@@ -692,3 +688,4 @@ root.geometry("800x600")
 root.resizable(0, 0)
 app = Window(root)
 root.mainloop()
+
