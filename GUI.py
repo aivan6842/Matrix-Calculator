@@ -689,3 +689,4 @@ root.resizable(0, 0)
 app = Window(root)
 root.mainloop()
 
+pass
