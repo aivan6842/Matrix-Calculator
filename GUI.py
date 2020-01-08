@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import font
 from fractions import Fraction
 import copy
-import matplotlib
 
 class Calc():
     def __init__(self):
