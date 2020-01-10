@@ -11,6 +11,7 @@ class Calc():
         self.internal_items = []
         self.digit_ended = False
         self.prev_digit_ended = False
+        self.hi=None
         
         
 class Matrix():
@@ -608,6 +609,9 @@ class Window(Frame):
 
         self.display_text()
     def evaluate(self, line):
+        print(Calculator.display_items)
+        print(Calculator.display_line)
+        print(Calculator.internal_items)
         if len(Calculator.internal_items) == 0:
             pass
         elif len(Calculator.internal_items) == 1:
