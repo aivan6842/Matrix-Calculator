@@ -11,7 +11,6 @@ class Calc():
         self.internal_items = []
         self.digit_ended = False
         self.prev_digit_ended = False
-        self.hi = None
         
         
 class Matrix():
