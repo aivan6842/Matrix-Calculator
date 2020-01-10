@@ -11,7 +11,7 @@ class Calc():
         self.internal_items = []
         self.digit_ended = False
         self.prev_digit_ended = False
-        
+        self.start_of_func = 0
         
 class Matrix():
     def __init__(self, num_rows, num_cols, inter_created = False, inter_rows = []):
@@ -600,7 +600,13 @@ class Window(Frame):
             Calculator.display_items.append(display_item)
             Calculator.internal_line += internal_item
         else:
-            Calculator.display_items.insert(-2, display_item)
+            op_set = {'-', '+', '^', '/', 'x'}
+            last_op_index = 0
+            for i in range(len(Calculator.display_items)-1, -1, -1):
+                if Calculator.display_items[i].strip() in op_set:
+                    last_op_index = i+1
+                    break
+            Calculator.display_items.insert(last_op_index, display_item)
             Calculator.internal_items.append(internal_item)
             Calculator.internal_line += internal_item
 
