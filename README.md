@@ -1,4 +1,4 @@
-This is a calculator for matrices as well as regular calculations.
+This is a calculator that supports regular calculations as well as matrix operations.
 
 How to use:
   1. Download the file
