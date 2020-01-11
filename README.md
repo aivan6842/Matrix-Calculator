@@ -1,4 +1,5 @@
 This is a calculator that supports regular calculations as well as matrix operations.
+
 ** Make sure the latest version of python is installed**
 
 How to use:
